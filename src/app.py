@@ -27,11 +27,6 @@ app = FastAPI()
 app.state = State()
 
 
-@app.on_event("startup")
-async def setup_word_processor():
-    app.state.word_processor = WordListProcessor()
-
-
 def get_word_processor() -> WordListProcessor:
     if not hasattr(app.state, "word_processor"):
         app.state.word_processor = WordListProcessor()
@@ -44,6 +39,11 @@ async def get_permutations(
 ):
     permutations = processor.get_permutations(word)
     return JSONResponse(content=permutations)
+
+
+@app.on_event("startup")
+async def setup_word_processor():
+    app.state.word_processor = WordListProcessor()
 
 
 if __name__ == "__main__":
