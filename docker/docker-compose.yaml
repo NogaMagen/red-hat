@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: fastapi_container
+    ports:
+      - "8000:8000"
+    environment:
+      PYTHONPATH: /src
+    restart: always
+    networks:
+      - app_network
+
+networks:
+  app_network:
