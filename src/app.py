@@ -15,11 +15,11 @@ class WordListProcessor:
         with open(file_path, "r") as file:
             for line in file:
                 word = line.strip()
-                word_signature = tuple(sorted(Counter(word).items()))
+                word_signature = frozenset(Counter(word).items())
                 self.word_dict[word_signature].append(word)
 
     def get_permutations(self, word: str):
-        word_signature = tuple(sorted(Counter(word).items()))
+        word_signature = frozenset(Counter(word).items())
         return self.word_dict.get(word_signature, [])
 
 
@@ -35,7 +35,7 @@ def get_word_processor() -> WordListProcessor:
 
 @app.get("/permutations")
 async def get_permutations(
-        word: str = Query(...), processor: WordListProcessor = Depends(get_word_processor)
+    word: str = Query(...), processor: WordListProcessor = Depends(get_word_processor)
 ):
     permutations = processor.get_permutations(word)
     return JSONResponse(content=permutations)
